@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rest — for Mahi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Outfit", system-ui, sans-serif;
+      background: #080c16;
+      color: #e8edf5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow-x: hidden;
+    }
+
+    .sky {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 100% 80% at 50% 120%, rgba(88, 110, 180, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(180, 140, 200, 0.08) 0%, transparent 50%),
+        #080c16;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--d, 4s) ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.15; }
+      50% { opacity: 0.75; }
+    }
+
+    .moon {
+      position: fixed;
+      top: 5%;
+      right: 7%;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #faf4e8, #d8ccb0);
+      box-shadow: 0 0 80px rgba(250, 244, 232, 0.15);
+      opacity: 0.55;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem 1.75rem 2.25rem;
+      background: rgba(16, 22, 38, 0.72);
+      border: 1px solid rgba(168, 196, 232, 0.12);
+      border-radius: 24px;
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    .for-mahi {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #c4a882;
+      letter-spacing: 0.12em;
+      text-transform: lowercase;
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      color: #dce8f8;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: #a8c4e8;
+    }
+
+    .letter {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.15rem;
+      line-height: 1.85;
+      color: #9aadc8;
+      margin-bottom: 1.75rem;
+      padding: 0 0.25rem;
+    }
+
+    .letter strong {
+      color: #c8daf0;
+      font-weight: 500;
+    }
+
+    .scene {
+      height: 150px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg, #141c30 0%, #1c2e42 50%, #1e3830 100%);
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(168, 196, 232, 0.08);
+      opacity: 0.35;
+      transition: opacity 0.9s ease, box-shadow 0.9s ease;
+    }
+
+    body.active .scene {
+      opacity: 1;
+      box-shadow: 0 0 40px rgba(123, 159, 212, 0.08);
+    }
+
+    .cloud {
+      position: absolute;
+      width: 50px;
+      height: 16px;
+      background: rgba(200, 210, 230, 0.1);
+      border-radius: 20px;
+      top: 18%;
+      animation: drift 25s linear infinite;
+    }
+
+    .cloud::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: inherit;
+      border-radius: 50%;
+      top: -10px;
+      left: 8px;
+    }
+
+    .cloud-2 { top: 28%; animation-duration: 35s; animation-delay: -12s; opacity: 0.6; width: 40px; }
+
+    @keyframes drift {
+      from { left: -60px; }
+      to { left: 110%; }
+    }
+
+    .hill {
+      position: absolute;
+      bottom: 0;
+      left: -15%;
+      right: -15%;
+      height: 48%;
+      background: linear-gradient(180deg, #2f5040, #1e3428);
+      border-radius: 50% 50% 0 0;
+    }
+
+    .fence {
+      position: absolute;
+      bottom: 36%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+    }
+
+    .fence-post {
+      width: 4px;
+      height: 28px;
+      background: #5c4d3e;
+      position: relative;
+    }
+
+    .fence-post::before,
+    .fence-post::after {
+      content: "";
+      position: absolute;
+      left: -12px;
+      width: 28px;
+      height: 3px;
+      background: #6d5c4a;
+      border-radius: 2px;
+    }
+
+    .fence-post::before { top: 6px; }
+    .fence-post::after { top: 16px; }
+
+    .sheep {
+      position: absolute;
+      bottom: 38%;
+      left: -50px;
+      width: 50px;
+      height: 40px;
+      animation: jump 5s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+
+    body.active .sheep { animation-play-state: running; }
+
+    @keyframes jump {
+      0%   { left: -8%;  transform: translateY(0); }
+      40%  { left: 46%;  transform: translateY(-34px); }
+      55%  { left: 56%;  transform: translateY(-38px); }
+      75%  { left: 76%;  transform: translateY(-8px); }
+      100% { left: 108%; transform: translateY(0); }
+    }
+
+    .sheep-fluff {
+      position: absolute;
+      width: 34px;
+      height: 26px;
+      background: #f0ece6;
+      border-radius: 50%;
+      bottom: 8px;
+      left: 10px;
+      box-shadow:
+        -4px -2px 0 #ece6de,
+        6px -4px 0 #e8e2da,
+        14px 0 0 #e4ddd4;
+    }
+
+    .sheep-head {
+      position: absolute;
+      width: 17px;
+      height: 15px;
+      background: #2c2c2c;
+      border-radius: 50%;
+      bottom: 14px;
+      left: 2px;
+    }
+
+    .sheep-head::before,
+    .sheep-head::after {
+      content: "";
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #111;
+      border-radius: 50%;
+      top: 5px;
+    }
+
+    .sheep-head::before { left: 3px; }
+    .sheep-head::after { right: 3px; }
+
+    .count {
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: #a8c4e8;
+      min-height: 2.2rem;
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      transition: opacity 0.6s;
+    }
+
+    body.active .count { opacity: 1; }
+
+    .count small {
+      display: block;
+      font-size: 0.8rem;
+      color: #6a7e9a;
+      margin-top: 0.15rem;
+      font-weight: 400;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1.05rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      color: #f0f4fa;
+      background: linear-gradient(135deg, rgba(123, 159, 212, 0.45), rgba(100, 130, 190, 0.35));
+      border: 1px solid rgba(200, 220, 245, 0.25);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      box-shadow: 0 4px 24px rgba(100, 140, 200, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px rgba(100, 140, 200, 0.3);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    body.active .btn {
+      background: rgba(60, 75, 100, 0.35);
+      border-color: rgba(138, 155, 184, 0.2);
+      color: #a0b0c8;
+      box-shadow: none;
+    }
+
+    .hint {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #5a6a82;
+      line-height: 1.5;
+    }
+
+    .volume-hint {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #4a5a72;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    body.active .volume-hint { opacity: 1; }
+
+    .footer-heart {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" id="sky"></div>
+  <div class="moon"></div>
+
+  <div class="card">
+    <p class="for-mahi">made for you, mahi</p>
+    <h1>Good night,<br><em>Mahi</em></h1>
+
+    <p class="letter">
+      The world can wait until morning. Tonight, you do not have to carry everything —
+      just lie down, listen, and let the quiet hold you.
+      <strong>You are safe. You are loved. Rest is yours.</strong>
+    </p>
+
+    <div class="scene">
+      <div class="cloud"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="hill"></div>
+      <div class="fence">
+        <div class="fence-post"></div>
+        <div class="fence-post"></div>
+        <div class="fence-post"></div>
+      </div>
+      <div class="sheep" id="sheep">
+        <div class="sheep-head"></div>
+        <div class="sheep-fluff"></div>
+      </div>
+    </div>
+
+    <p class="count" id="count">0<small>sheep</small></p>
+
+    <button class="btn" id="btn" type="button">Help me sleep, Mahi</button>
+    <p class="hint" id="hint">One tap — gentle sound & sheep begin</p>
+    <p class="volume-hint">Turn your phone volume up · use headphones if you can</p>
+
+    <p class="footer-heart">with love · sweet dreams</p>
+  </div>
+
+  <script>
+    (function initStars() {
+      const sky = document.getElementById("sky");
+      for (let i = 0; i < 55; i++) {
+        const s = document.createElement("div");
+        s.className = "star";
+        const size = Math.random() > 0.85 ? 3 : 2;
+        s.style.width = s.style.height = size + "px";
+        s.style.left = Math.random() * 100 + "%";
+        s.style.top = Math.random() * 100 + "%";
+        s.style.setProperty("--d", (3 + Math.random() * 4) + "s");
+        s.style.animationDelay = Math.random() * 5 + "s";
+        sky.appendChild(s);
+      }
+    })();
+
+    let on = false;
+    let count = 0;
+    let audioCtx = null;
+    let sound = { nodes: [], timers: [], master: null };
+
+    const btn = document.getElementById("btn");
+    const hint = document.getElementById("hint");
+    const countEl = document.getElementById("count");
+    const sheep = document.getElementById("sheep");
+
+    sheep.addEventListener("animationiteration", () => {
+      if (on) {
+        count++;
+        countEl.innerHTML = count + "<small>sheep</small>";
+      }
+    });
+
+    function getAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function playBell(ctx, master, freq) {
+      const t = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.12, t + 0.08);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 3.5);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(t);
+      osc.stop(t + 3.6);
+      sound.nodes.push(osc);
+    }
+
+    async function startSound() {
+      const ctx = getAudio();
+
+      if (ctx.state === "suspended") {
+        await ctx.resume();
+      }
+
+      stopSound(false);
+
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0, ctx.currentTime);
+      master.gain.linearRampToValueAtTime(0.85, ctx.currentTime + 1.5);
+      master.connect(ctx.destination);
+      sound.master = master;
+
+      [130.81, 196, 261.63].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        const g = ctx.createGain();
+        g.gain.value = [0.14, 0.08, 0.04][i];
+        osc.connect(g);
+        g.connect(master);
+        osc.start();
+        sound.nodes.push(osc);
+      });
+
+      const len = ctx.sampleRate * 2;
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < len; i++) {
+        const white = Math.random() * 2 - 1;
+        last = last * 0.98 + white * 0.15;
+        d[i] = last;
+      }
+      const rain = ctx.createBufferSource();
+      rain.buffer = buf;
+      rain.loop = true;
+      const filt = ctx.createBiquadFilter();
+      filt.type = "lowpass";
+      filt.frequency.value = 700;
+      const rg = ctx.createGain();
+      rg.gain.value = 0.18;
+      rain.connect(filt);
+      filt.connect(rg);
+      rg.connect(master);
+      rain.start();
+      sound.nodes.push(rain);
+
+      playBell(ctx, master, 523.25);
+
+      const bells = [659.25, 783.99, 523.25];
+      let bi = 0;
+      const bellTimer = setInterval(() => {
+        if (!on) return;
+        playBell(ctx, master, bells[bi % bells.length]);
+        bi++;
+      }, 5500);
+      sound.timers.push(bellTimer);
+    }
+
+    function stopSound(resetCtx) {
+      sound.timers.forEach(t => clearInterval(t));
+      sound.timers = [];
+      sound.nodes.forEach(n => {
+        try { if (n.stop) n.stop(0); } catch (_) {}
+        try { n.disconnect(); } catch (_) {}
+      });
+      sound.nodes = [];
+      if (sound.master) {
+        try { sound.master.disconnect(); } catch (_) {}
+        sound.master = null;
+      }
+      if (resetCtx !== false && audioCtx) {
+        audioCtx.suspend().catch(() => {});
+      }
+    }
+
+    btn.addEventListener("click", async () => {
+      try {
+        if (!on) {
+          on = true;
+          document.body.classList.add("active");
+          btn.textContent = "Stop";
+          hint.textContent = "Close your eyes, Mahi. Just breathe.";
+          await startSound();
+        } else {
+          on = false;
+          document.body.classList.remove("active");
+          btn.textContent = "Help me sleep, Mahi";
+          hint.textContent = "One tap — gentle sound & sheep begin";
+          stopSound();
+          count = 0;
+          countEl.innerHTML = "0<small>sheep</small>";
+          sheep.style.animation = "none";
+          void sheep.offsetHeight;
+          sheep.style.animation = "";
+        }
+      } catch (err) {
+        console.error(err);
+        hint.textContent = "Tap again — and turn volume up on your device";
+      }
+    });
+  </script>
+</body>
+</html>
